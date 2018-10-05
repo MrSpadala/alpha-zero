@@ -1,0 +1,31 @@
+up to iteration 12, cpuct 1.6, discard first 8 moves, always accept model.
+
+started now from it 12, no discard, cpuct 2.0, always accept model
+
+started now from iteration 21, cpuct 1.0, model accepted only if scores positively.
+From iteration 21-23 it seems to have learn basic rules of the game,
+such as put four in a row to win.
+It focuses primarly on winning the game greedily, it hasn't learned how
+to defend and it doesn't try to stop opponent moves.
+
+started from oteration 29, removed prior probability factor from U vector
+
+started from 31, cpuct 2.0, always accept
+
+started now from 33, cpuct 1.0, always accept, tripled q value of winner
+
+now on it 35. changed winner return in mcts. now it games pretty well,
+with attack and defense tecniques. now starting training. cpuct on 0.2
+
+started 47 with noise
+
+
+restarted from 53, in generate_training_game iteration is iteration*10
+
+restarted from 54, iteration*1000
+
+56, iteration*10000
+
+57, iteration*307
+
+58, it 30707

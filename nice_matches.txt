@@ -1,0 +1,2 @@
+53.h5, simpermove 800, cpuct 1.9, tau 14, noise 0.0, moves: 341265442, game_it
+55.h5, simpermove 800, cpuct 1.9, tau 14, noise 0.0, moves: 43120231355, game_it+10
