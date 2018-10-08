@@ -85,9 +85,9 @@ def train(good_luck=False):
 
 
         # Evaluate
-        score = evaluate_net(net='best', net_opponent=str(globals.get_last_iteration()+1)) if not train_args.always_accept_model else -np.inf
-        # If new net scored positively accept new model. CHANGED TO NEGATIVE: inverted net and net_opponent
-        if score <=0:
+        score = evaluate_net(net=str(globals.get_last_iteration()+1), net_opponent='best') if not train_args.always_accept_model else np.inf
+        # If new net scored positively accept new model
+        if score >= 0:
             print('Accepting model, score', score)
             globals.accept_model()
         else:
@@ -261,7 +261,7 @@ def train_net_process(examples):
 
 
 
-def evaluate_net(net=None, net_opponent='best'):
+def evaluate_net(net=None, net_opponent=None):
     """
     Evaluates net against net_opponent. By default evaluates 'best' net against
     the recently trained one
