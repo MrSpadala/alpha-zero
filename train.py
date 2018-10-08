@@ -214,10 +214,20 @@ def selfplay_process(chunk_counter, games_per_chunk, all_moves):
                 game_moves = game_moves[8:]
             """
 
+            """
             # Add moves of this game if it's not a tie
-            #if not winner==0:
+            if not winner==0:
+                examples += game_moves
+                continue
+            """
+
+            # Add all moves from the game to the examples
             examples += game_moves
             
+        # Save on disk the data of the current iteration. In case of stop in the middle of an
+        # iteration, these data are not restored automatically, need to do that by hand. Every
+        # .pickle file is just a python list in the form [[s, pi, v], [s, pi, v], ...], so you
+        # only need to append this list to the examples
         tmp_dir = 'tmp/'
         if not path.exists(tmp_dir):
             mkdir(tmp_dir)
@@ -275,7 +285,6 @@ def evaluate_net(net=None, net_opponent=None):
 
     processes = [None] * train_args.parallel_num
 
-    #p = mp.Process(target=train_net_process, args=(examples,))
     for i in range(train_args.parallel_num):
         processes[i] = mp.Process(target=evaluate_net_process, 
             args=(net, net_opponent, chunk_counter, train_args.games_per_chunk, results_queue,))
