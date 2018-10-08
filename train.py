@@ -63,7 +63,7 @@ def train(good_luck=False):
     if not good_luck:
         raise Exception('You will need it')
 
-    #init file and folders for training
+    # Init file and folders for training
     globals.init_training_stuff()
 
     # Resume training
@@ -80,8 +80,6 @@ def train(good_luck=False):
 
         # Train
         train_net(examples)
-
-        #raise Exception('STOP HERE')
 
 
         # Evaluate
@@ -256,7 +254,6 @@ def train_net(examples):
     p = mp.Process(target=train_net_process, args=(examples,))
     p.start()
     p.join()
-    #input('Joined train process. ')
 
 def train_net_process(examples):
     globals.set_gpu_visible(True)
@@ -343,7 +340,7 @@ def evaluate_net_process(net, net_opponent, chunk_counter, games_per_chunk, resu
                 # debug
                 #print('root state', mcts.root.state)
 
-                #net turn
+                # Net turn
                 action = np.argmax(mcts.get_pi(player))
                 game.next_state(action, player)
                 if train_args.show_moves:
@@ -354,14 +351,15 @@ def evaluate_net_process(net, net_opponent, chunk_counter, games_per_chunk, resu
                     break
 
                 if not mcts_opponent.root.has_children():
-                    #if there are no children, expand the current mcts root, but 
-                    #first check if the game is finished. If that's the case nothing
-                    #is expanded
+                    # If there are no children, expand the current mcts root, but 
+                    # first check if the game is finished. If that's the case nothing
+                    # is expanded
                     mcts_opponent.search(mcts_opponent.root, player)
                 assert(mcts_opponent.root.children[action])
                 mcts_opponent.root = mcts_opponent.root.children[action]
 
-                #net_opponent turn
+                # Net opponent turn
+
                 # debug
                 #print('root state', mcts_opponent.root.state)
 
@@ -380,11 +378,10 @@ def evaluate_net_process(net, net_opponent, chunk_counter, games_per_chunk, resu
                 assert(mcts.root.children[action])
                 mcts.root = mcts.root.children[action]
 
-            #new net was the first to move
+            # Update overall result ('net' was the first to move)
             result += 0 if not any(game.valid_moves()) else (1 if game.get_winner()==first_player else -1)
 
             print('--', cp().name, '-- selfplay match ended')
-            #print('.', end='')
 
     print('--', cp().name, '-- Finished')
 
