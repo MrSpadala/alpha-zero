@@ -1,16 +1,10 @@
 
 import numpy     as np
 from   math      import sqrt
-from   functools import partial
-
 
 from game    import *
 from globals import *
 
-#debug
-from pdb import set_trace as breakpoint
-from pprint import pprint
-from time import time
 
 """
 This module implements the monte carlo tree search guided
@@ -128,8 +122,6 @@ class MCTS:
         else:
             pi = visits_norm ** (1/self.tau)
             pi /= sum(pi)
-            #assert(not all(np.isnan(visits)))
-            #print('NANSUM of visits: ',np.nansum(visits))
 
         # MCTS data
         if mcts_args.show_moves_detail:
@@ -148,17 +140,15 @@ class MCTS:
     
     def search(self, edge, player):
         """Implements the tree search"""
-        #breakpoint()
         assert(abs(player)==1)  #debug only
 
         # Check if game is ended before continuing
-        #winner = edge.state.get_winner()
         if edge.state.is_finished():
             winner = edge.state.get_winner()
             winner = 0 if not winner else (1 if winner==-player else -1)  #-player cause the winning move was done by -player
             #winner *= 2  #try to give more weigth to the winner
             edge.N += 1
-            edge.W += winner   #DUE PLAYER USANO LO STESSO W!!!!
+            edge.W += winner 
             edge.Q  = edge.W/edge.N
             return -winner
 
@@ -175,10 +165,10 @@ class MCTS:
             #e = time()
             #print(e-s)
 
-            #WITH GPU IS SLOOOOOOOOOOOOWWEEEEER
+            # With GPU is WAAAAAY slower
 
-            #these will be our new states with the action performed
-            #(next_state function returns a deep copy of the updated state)
+            # These will be our new states with the action performed
+            # (next_state function returns a deep copy of the updated state)
             states = [edge.state.next_state(action, player, copy=True) if valid else None
                 for action, valid in zip(range(edge.state.action_size()), edge.valids)]
             
@@ -197,8 +187,10 @@ class MCTS:
             U_plus_Q = [(mcts_args.cpuct*children[a].P*visits_sum/(1+children[a].N) + children[a].Q)
                 if valid else np.nan for a, valid in zip(range(edge.state.action_size()), valids)]
 
-            #print('U_plus_Q inside search:', U_plus_Q, visits_sum)
             action = np.nanargmax(U_plus_Q)
+
+            # debug
+            #print('U_plus_Q inside search:', U_plus_Q, visits_sum)
             #print('children', children)
             #print('VISIT', visits_sum, [c.N if c else None for c in children])
             #print('U_plus_Q', U_plus_Q)
