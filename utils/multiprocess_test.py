@@ -1,4 +1,7 @@
 
+"""
+Some testing when developing multiprocess architecture
+"""
 
 
 # TEST RESULT: same speed, maybe better with one queue and a single lock

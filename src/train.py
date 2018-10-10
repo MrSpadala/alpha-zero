@@ -390,35 +390,15 @@ def evaluate_net_process(net, net_opponent, chunk_counter, games_per_chunk, resu
     return 0
 
 
-
-if __name__ == '__main__':
-    if sys.argv[-1] == '-c':
-        print('Executing custom snippet')
-        train_args.games_per_chunk = 3
-        scores = []
-        ev = lambda n1,n2,s: s.append((n1,n2,evaluate_net(net=n1,net_opponent=n2)))
-        ev('53', '54', scores)
-        print(scores)
-        ev('53', '55', scores)
-        print(scores)
-        ev('54', '53', scores)
-        print(scores)
-        ev('55', '53', scores)
-        print(scores)
-        ev('55', '54', scores)
-        print(scores)
-        ev('54', '55', scores)
-        pprint(scores)
-
+def main():
+    if not train_args.evaluate_only:
+        if train_args.show_moves:
+            train_args.parallel_num = 1
+        train(good_luck=True)
     else:
-        if not train_args.evaluate_only:
-            if train_args.show_moves:
-                train_args.parallel_num = 1
-            train(good_luck=True)
-        else:
-            if train_args.show_moves:
-                train_args.parallel_num = 1
-            print('Evaluating')
-            s1 = evaluate_net(net='1', net_opponent='best')
-            print('Score:', s1)
+        if train_args.show_moves:
+            train_args.parallel_num = 1
+        print('Evaluating')
+        s1 = evaluate_net(net='1', net_opponent='best')
+        print('Score:', s1)
 

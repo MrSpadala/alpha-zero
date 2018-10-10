@@ -83,7 +83,10 @@ class NNet():
         self.model.fit(x=states, y=[pis, vs], batch_size=nnet_args.batch_size, 
             validation_split=validation_modifier, epochs=epochs or nnet_args.epochs)
 
-
+    def evaluate(self, examples):
+        states, pis, vs = list(zip(*examples))  #pis and vs will be our targets
+        states, pis, vs = np.asarray(states), np.asarray(pis), np.asarray(vs)
+        return self.model.evaluate(x=states, y=[pis, vs], batch_size=nnet_args.batch_size, verbose=0)
         
 
     def save(self, iteration):

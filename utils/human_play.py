@@ -1,96 +1,66 @@
 
 import sys
-import pickle
-import numpy           as np
-from random import randint
-import multiprocessing as mp
-from   collections     import deque
-from   shutil          import copy   as cp
-from   os              import remove as rm, mkdir, path
-from   math            import ceil
-from   time            import sleep
-from   pprint          import pprint
-from   functools       import partial
+import numpy as np
+from random import randint, seed
+from time   import sleep, time
 
-from game    import GameState
 import globals
 
+seed(time())
 
 """
 This module let a human player play against a net
 """
 
-def evaluate_net_process(net, net_opponent, games_per_proc, it):
-    """
-    Best network plays some games against the new trained one.
-    Returns the sum of ties, wins and loses, where ties are 0,
-    wins are 1 and loses -1.
-    """
+def human_play(net_checkpoint):
     globals.set_gpu_visible(True)
-    from multiprocessing import current_process as cp
     from time import sleep
     from MCTS import MCTS
     from NNet import NNet
+    from game import GameState
 
-    net = NNet('best')
-    net_opponent = None
+    net = NNet(net_checkpoint)
 
-    result = 0
+    # init environment
+    game, first_player = GameState.generate_training_game(randint(0,10000))
+    mcts = MCTS(net, game.copy())
 
-    for game_it in range(it, it+games_per_proc):
+    player = first_player
+    # Game loop
+    while True:
 
-        # init environment
-        game, first_player = GameState.generate_training_game(game_it+1005)
-        mcts = MCTS(net, game.copy())
-        #mcts_opponent = MCTS(net_opponent, game.copy())
+        #net turn
+        action = np.argmax(mcts.get_pi(player))
+        game.next_state(action, player)
 
-        player = first_player
-        # Game loop
-        while True:
-            # debug
-            #print('root state', mcts.root.state)
+        print('\n\n\nnet MOVED\n'+str(game))
+        sleep(0.7)
 
-            #net turn
-            action = np.argmax(mcts.get_pi(player))
-            game.next_state(action, player)
+        if game.is_finished():
+            break
 
-            print('\n\n\nnet MOVED\n'+str(game))
-            sleep(0.7)
-            
-            if game.is_finished():
-                break
+        action = int(input(': '))
+        game.next_state(action, -player)
 
+        print('\n\n\nyou MOVED\n'+str(game))
+        sleep(0.7)
 
-            #action = randint(0,6)
-            #print('Playing random', action)
-            action = int(input(': '))
-            game.next_state(action, -player)
+        if game.is_finished():
+            break
 
-            print('\n\n\nnet_opponent MOVED\n'+str(game))
-            sleep(0.7)
+        if not mcts.root.has_children():
+            mcts.search(mcts.root, -player)
+        assert(mcts.root.children[action])
+        mcts.root = mcts.root.children[action]
 
-            if game.is_finished():
-                break
-
-            if not mcts.root.has_children():
-                mcts.search(mcts.root, -player)
-            assert(mcts.root.children[action])
-            mcts.root = mcts.root.children[action]
-
-        #new net was the first to move
-        result += 0 if not any(game.valid_moves()) else (1 if game.get_winner()==first_player else -1)
-
-        print(cp(), '=== evaluation ===', '{}/{}'.format(game_it-it+1, games_per_proc))
-        #print('.', end='')
-
-    return result
+    print('Game over')
 
 
 
-if __name__ == '__main__':
-    try:
-        it = int(sys.argv[-1])
-    except:
-        it = 0
-    
-    evaluate_net_process(None, None, 100, it)
+def main(net):
+    net = net[:-3] if net.endswith('.h5') else net
+
+    while True:
+        human_play(net)
+
+
