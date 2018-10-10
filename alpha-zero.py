@@ -3,6 +3,7 @@ import sys
 sys.path += ['src/', 'utils/']
 
 import human_play
+import train
 
 
 if len(sys.argv) == 1:
@@ -16,3 +17,6 @@ if sys.argv[1] == 'play':
     else:
         net = sys.argv[2]
     human_play.main(net)
+
+elif sys.argv[1] == 'train':
+    train.main()
