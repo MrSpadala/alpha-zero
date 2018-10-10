@@ -93,6 +93,7 @@ fix, axs = plt.subplots(2,1)
 
 axs[0].axis([0,60,0.0,0.85])
 axs[0].plot(it_l, loss_l, label='v loss', color='y')
+axs[1].axis([0,60,0.0, 5.2])
 axs[1].plot(it_pi, loss_pi, label='pi loss')
 plt.xlabel('iterazione')
 #axs.plot(it_pi, loss_tot, label='total loss')
