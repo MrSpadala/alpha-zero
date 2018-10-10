@@ -16,7 +16,7 @@ every edge has a list of children edges. (Read below)
 
 mcts_args = dotdict({
     #numbers of mcts simulation for each move (1600 in alphago)
-    'sim_per_move' : 1400,  
+    'sim_per_move' : 800,  
 
     #hyperparameter determining exploitation/exploration during
     #the tree search.
