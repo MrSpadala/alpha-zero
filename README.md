@@ -7,8 +7,8 @@ Tensorflow and Keras on Python >=3.5
 Tested on Keras 2.2.0 and Tensorflow 1.8.0
 
 ## How to run
-‘python3 alpha-zero.py train‘ if you want to launch training
-‘python3 alpha-zero.py play‘ if you want to play against a trained policy. Make sure to have downloaded the .zip file in the release section and moved its contents inside ‘checkpoints/‘ folder
+`python3 alpha-zero.py train` if you want to launch training
+`python3 alpha-zero.py play` if you want to play against a trained policy. Make sure to have downloaded the .zip file in the release section and moved its contents inside `checkpoints/` folder
 
 ## Training
 In the release section you can find some checkpoints of a neural network trained to play connect four game.
