@@ -102,3 +102,8 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# checkpoints
+checkpoints/*.h5
+
+iteration.number
