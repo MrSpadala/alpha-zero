@@ -1,5 +1,5 @@
 
-# Alpha Zero
+# AlphaZero
 Simple and clean implementation of Alpha Zero algorithm
 
 ## Requirements
@@ -15,7 +15,7 @@ In the release section you can find some checkpoints of a neural network trained
 The training lasted about ~50 days and still it is not sufficient, because the selfplay phase is too demanding (tested with an i5-4670)
 
 ## Docs and explainations
-You can find it here <todo insert link> (italian only)
+You can find more info inside [tesi.pdf](tesi.pdf) (italian only)
 
 
 This is my thesis project for Computer Engineering bachelor's degree
